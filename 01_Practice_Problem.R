@@ -31,7 +31,7 @@ lambda1.position <- which.max(abs(eigen.A$values))
 
 #####   Eigenvalue + Rigth Eigenvector #####  
 lambda1 <- eigen.A$values[lambda1.position]
-omega1 <- eigen.A$vectors[lambda1.position,]
+omega1 <- eigen.A$vectors[,lambda1.position]
 
 ##### LeftEigenvector #####  
 ve1 <- eigen(t(A))$vectors[lambda1.position,]
