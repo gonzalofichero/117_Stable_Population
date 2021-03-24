@@ -34,7 +34,7 @@ lambda1 <- eigen.A$values[lambda1.position]
 omega1 <- eigen.A$vectors[,lambda1.position]
 
 ##### LeftEigenvector #####  
-ve1 <- eigen(t(A))$vectors[lambda1.position,]
+ve1 <- eigen(t(A))$vectors[,lambda1.position]
 
 
 
@@ -47,7 +47,7 @@ N <- solve(diag(15) - U)
 #### 3. Population projection ####
 
 ##### Setting initial population in t = 0 #####
-n0 <- as.vector(rep(100, 15))
+n0 <- as.vector(rep(10000, 15))
 
 ##### Calculating C vector #####
 c1 <- as.vector(ve1 %*% n0)
