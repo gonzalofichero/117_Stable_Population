@@ -31,7 +31,7 @@ lambda1.position <- which.max(abs(eigen.A$values))
 
 #####   Eigenvalue + Rigth Eigenvector #####  
 lambda1 <- eigen.A$values[lambda1.position]
-omega1 <- eigen.A$vectors[,lambda1.position]
+omega1 <- (-1) * eigen.A$vectors[,lambda1.position]
 
 ##### LeftEigenvector #####  
 ve1 <- eigen(t(A))$vectors[,lambda1.position]
@@ -54,13 +54,13 @@ c1 <- as.vector(ve1 %*% n0)
 
 
 ##### Looping for 10 periods #####
-n <- matrix(,nrow=15,ncol=10)
+n <- matrix(,nrow=15,ncol=11)
 
-for (t in 1:10) {
-  n[,t] <- c1 %*% (lambda1^t) %*% omega1
+for (t in 0:10) {
+  n[,t+1] <- c1 %*% (lambda1^t) %*% omega1
 }
 
-n.complete <- as.data.frame(cbind(n0, n))
+n.complete <- as.data.frame(n)
 names(n.complete) <- c("n0", "n1", "n2", "n3", "n4", "n5",
                        "n6", "n7", "n8", "n9", "n10")
 
