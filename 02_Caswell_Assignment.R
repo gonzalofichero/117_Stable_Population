@@ -33,6 +33,9 @@ lambda1.position.pen1 <- which.max(abs(eigen.penguin1$values))
 lambda1.pen1 <- eigen.penguin1$values[lambda1.position.pen1]
 omega1.pen1 <- eigen.penguin1$vectors[,lambda1.position.pen1]
 
+# Standardizing omega vector
+omega1.pen1.stand <- as.numeric(omega1.pen1) / as.numeric(sum(omega1.pen1))
+
 ###### LeftEigenvector ###### 
 ve1 <- eigen(t(pen1))$vectors[,lambda1.position.pen1]
 
@@ -52,7 +55,7 @@ N.pen1 <- solve(diag(dim(U.pen1)[1]) - U.pen1)
 ####### Setting initial population in t = 0 ####### 
 n0.a <- as.vector(c(1,0,0,0,0,0,0))
 n0.b <- as.vector(c(0,0,0,0,0,0,1))
-n0.c <- omega1.pen1
+n0.c <- omega1.pen1.stand
 
 
 ####### Calculating C vector ####### 
@@ -67,10 +70,18 @@ n.a <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 n.b <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 n.c <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 
-for (t in 0:periods) {
-  n.a[,t+1] <- as.numeric(c1.a %*% (lambda1.pen1^t) %*% omega1.pen1)
-  n.b[,t+1] <- as.numeric(c1.b %*% (lambda1.pen1^t) %*% omega1.pen1)
-  n.c[,t+1] <- as.numeric(c1.c %*% (lambda1.pen1^t) %*% omega1.pen1)
+####### Adding initial population #######
+n.a[,1] <- n0.a
+n.b[,1] <- n0.b
+n.c[,1] <- n0.c
+
+####### Looping #######
+for (t in 1:periods) {
+  
+  n.a[,t+1] <- pen1 %*% n.a[,t]
+  n.b[,t+1] <- pen1 %*% n.b[,t]
+  n.c[,t+1] <- pen1 %*% n.c[,t]
+  
 }
 
 
