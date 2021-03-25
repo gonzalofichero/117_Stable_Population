@@ -65,7 +65,7 @@ c1.c <- as.vector(ve1 %*% n0.c)
 
 
 ####### Looping for X periods ####### 
-periods <- 100
+periods <- 25
 n.a <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 n.b <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 n.c <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
@@ -88,8 +88,8 @@ for (t in 1:periods) {
 ###### Plotting projections ######
 
 n.a.dat <- data.frame(n.a)
-names(n.a.dat) <- seq(0,100)
-n.a.dat$stage <- seq(1,7)
+names(n.a.dat) <- seq(0,periods)
+n.a.dat$stage <- seq(1,dim(U.pen1)[1])
 
 n.a.dat <- n.a.dat %>% 
             pivot_longer(cols = !stage, values_to = "n_t", names_to = "t")
