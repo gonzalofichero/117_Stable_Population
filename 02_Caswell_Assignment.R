@@ -1,4 +1,4 @@
-#### 1.0. Mise en Place ####
+#### 0.0. Mise en Place ####
 
 ##### Loading packages ##### 
 library(tidyverse)
@@ -14,63 +14,82 @@ View(pen1)
 View(pen2)
 
 
-##### 1.a. Write a program to project the population starting from several different initial conditions: ##### 
+#### 1.a. Write a program to project the population starting from several different initial conditions: #### 
 
 # A) one newborn baby penguin
 # B) one breeding adult penguin
 # C) a population with the stable stage distribution
 
-###### Normal Population: penguinmat1.txt ######
-####### Extracting eigenvectors/values from A ####### 
+
+##### Normal Population: penguinmat1.txt #####
+
+###### Extracting eigenvectors/values from A ###### 
 eigen.penguin1 <- eigen(pen1)
 
-####### Let's find the one that checks Perron-Frobenius ####### 
+###### Let's find the one that checks Perron-Frobenius ###### 
 lambda1.position.pen1 <- which.max(abs(eigen.penguin1$values))
 
-####### Eigenvalue + Rigth Eigenvector ####### 
+###### Eigenvalue + Rigth Eigenvector ###### 
 lambda1.pen1 <- eigen.penguin1$values[lambda1.position.pen1]
 omega1.pen1 <- eigen.penguin1$vectors[,lambda1.position.pen1]
 
-####### LeftEigenvector ####### 
+###### LeftEigenvector ###### 
 ve1 <- eigen(t(pen1))$vectors[,lambda1.position.pen1]
 
 
-####### U matrix ####### 
+###### U matrix ###### 
 U.pen1 <- pen1
 U.pen1[1,7] <- 0
 
 
-####### Calculating Fundamental Matrix N for both penguin Universes ####### 
+###### Calculating Fundamental Matrix N for both penguin Universes ###### 
 
 N.pen1 <- solve(diag(dim(U.pen1)[1]) - U.pen1)
 
 
-#### 3. Population projection ####
+###### Population projection ###### 
 
-##### Setting initial population in t = 0 #####
+####### Setting initial population in t = 0 ####### 
 n0.a <- as.vector(c(1,0,0,0,0,0,0))
 n0.b <- as.vector(c(0,0,0,0,0,0,1))
 n0.c <- omega1.pen1
 
 
-##### Calculating C vector #####
+####### Calculating C vector ####### 
 c1.a <- as.vector(ve1 %*% n0.a)
 c1.b <- as.vector(ve1 %*% n0.b)
 c1.c <- as.vector(ve1 %*% n0.c)
 
 
-##### Looping for X periods #####
+####### Looping for X periods ####### 
 periods <- 100
 n.a <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 n.b <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
 n.c <- matrix(,nrow=dim(U.pen1)[1],ncol=periods+1)
-
 
 for (t in 0:periods) {
   n.a[,t+1] <- as.numeric(c1.a %*% (lambda1.pen1^t) %*% omega1.pen1)
   n.b[,t+1] <- as.numeric(c1.b %*% (lambda1.pen1^t) %*% omega1.pen1)
   n.c[,t+1] <- as.numeric(c1.c %*% (lambda1.pen1^t) %*% omega1.pen1)
 }
+
+
+###### Plotting projections ######
+
+n.a.dat <- data.frame(n.a)
+names(n.a.dat) <- seq(0,100)
+n.a.dat$stage <- seq(1,7)
+
+n.a.dat <- n.a.dat %>% 
+            pivot_longer(cols = !stage, values_to = "n_t", names_to = "t")
+
+n.a.dat %>% 
+  ggplot(aes(x = as.numeric(t), y = n_t, color = as.factor(stage))) + geom_line()
+
+
+
+
+
 
 
 
