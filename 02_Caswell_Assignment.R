@@ -85,17 +85,52 @@ for (t in 1:periods) {
 }
 
 
-###### Plotting projections ######
+###### Re-arranging projections ######
 
+# Initial population a #
 n.a.dat <- data.frame(n.a)
 names(n.a.dat) <- seq(0,periods)
 n.a.dat$stage <- seq(1,dim(U.pen1)[1])
 
 n.a.dat <- n.a.dat %>% 
-            pivot_longer(cols = !stage, values_to = "n_t", names_to = "t")
+            pivot_longer(cols = !stage, values_to = "n_t", names_to = "t") %>% 
+            mutate(stage = as.factor(stage),
+                   t = as.numeric(t),
+                   type_penguin = "normal",
+                   initial_pop = "a")
 
-n.a.dat %>% 
-  ggplot(aes(x = as.numeric(t), y = n_t, color = as.factor(stage))) + geom_line()
+# Initial population b #
+n.b.dat <- data.frame(n.b)
+names(n.b.dat) <- seq(0,periods)
+n.b.dat$stage <- seq(1,dim(U.pen1)[1])
+
+n.b.dat <- n.b.dat %>% 
+  pivot_longer(cols = !stage, values_to = "n_t", names_to = "t") %>% 
+  mutate(stage = as.factor(stage),
+         t = as.numeric(t),
+         type_penguin = "normal",
+         initial_pop = "b")
+
+# Initial population c #
+n.c.dat <- data.frame(n.c)
+names(n.c.dat) <- seq(0,periods)
+n.c.dat$stage <- seq(1,dim(U.pen1)[1])
+
+n.c.dat <- n.c.dat %>% 
+  pivot_longer(cols = !stage, values_to = "n_t", names_to = "t") %>% 
+  mutate(stage = as.factor(stage),
+         t = as.numeric(t),
+         type_penguin = "normal",
+         initial_pop = "c")
+
+
+# Plotting all together #
+
+penguins <- rbind(n.a.dat, n.b.dat, n.c.dat)
+
+penguins %>% 
+  ggplot(aes(x = t, y = n_t, color = stage)) + geom_line() +
+  facet_wrap(~ initial_pop)
 
 
 
