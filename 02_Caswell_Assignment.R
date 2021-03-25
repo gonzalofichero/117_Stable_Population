@@ -59,9 +59,9 @@ N.pen2 <- solve(diag(dim(U.pen2)[1]) - U.pen2)
 #### 3. Population projection ####
 
 ##### Setting initial population in t = 0 #####
-n0.a <- as.vector(c(1,5,5,5,5,5,0))
-n0.b <- as.vector(c(0,5,5,5,5,5,1))
-n0.c <- as.vector(c(1,5,5,5,5,5,1))
+n0.a <- as.vector(c(1,0,0,0,0,0,0))
+n0.b <- as.vector(c(0,0,0,0,0,0,1))
+n0.c <- omega1.pen1
 
 
 ##### Calculating C vector #####
