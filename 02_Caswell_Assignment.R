@@ -254,7 +254,8 @@ penguins %>%
   group_by(type_penguin, initial_pop, t) %>% 
   summarise(pop = sum(n_t, na.rm=T)) %>% 
   ggplot(aes(x = t, y = pop * 100)) + geom_line() +
-  facet_wrap(~ initial_pop + type_penguin, ncol = 2)
+  facet_wrap(~ initial_pop + type_penguin, ncol = 2) +
+  #scale_y_log10()
 
 
 
